@@ -1,4 +1,4 @@
-package com.seekho.animeapp.domain.repository
+package com.seekho.animeapp.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
@@ -18,13 +18,13 @@ class AnimeRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : AnimeRepository {
-    
+
     override fun getAllAnime(): LiveData<List<Anime>> {
         return localDataSource.getAllAnime().map { entities ->
             entities.map { AnimeMapper.mapEntityToDomain(it) }
         }
     }
-    
+
     override suspend fun refreshAnimeList(): Resource<Unit> {
         return withContext(Dispatchers.IO) {
             try {
@@ -39,7 +39,7 @@ class AnimeRepositoryImpl @Inject constructor(
             }
         }
     }
-    
+
     override suspend fun getAnimeDetails(animeId: Int): Resource<Anime> {
         return withContext(Dispatchers.IO) {
             try {
@@ -48,19 +48,19 @@ class AnimeRepositoryImpl @Inject constructor(
                 if (localAnime != null) {
                     return@withContext Resource.Success(AnimeMapper.mapEntityToDomain(localAnime))
                 }
-                
+
                 // If not found locally, fetch from API
                 val response = remoteDataSource.getAnimeDetails(animeId)
                 val animeEntity = AnimeMapper.mapDtoToEntity(response.data)
                 localDataSource.insertAnime(animeEntity)
-                
+
                 Resource.Success(AnimeMapper.mapEntityToDomain(animeEntity))
             } catch (e: Exception) {
                 Resource.Error(e.message ?: "Unknown error occurred")
             }
         }
     }
-    
+
     override suspend fun searchAnime(query: String): Resource<List<Anime>> {
         return withContext(Dispatchers.IO) {
             try {
@@ -74,7 +74,7 @@ class AnimeRepositoryImpl @Inject constructor(
             }
         }
     }
-    
+
     override suspend fun toggleFavorite(animeId: Int): Resource<Unit> {
         return withContext(Dispatchers.IO) {
             try {
@@ -90,7 +90,7 @@ class AnimeRepositoryImpl @Inject constructor(
             }
         }
     }
-    
+
     override fun getFavoriteAnime(): LiveData<List<Anime>> {
         return localDataSource.getFavoriteAnime().map { entities ->
             entities.map { AnimeMapper.mapEntityToDomain(it) }
