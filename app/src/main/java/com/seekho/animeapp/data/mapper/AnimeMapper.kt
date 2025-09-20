@@ -34,22 +34,7 @@ object AnimeMapper {
             isFavorite = entity.isFavorite
         )
     }
-    
-    fun mapDomainToEntity(domain: Anime): AnimeEntity {
-        return AnimeEntity(
-            malId = domain.malId,
-            title = domain.title,
-            imageUrl = domain.imageUrl,
-            score = domain.score,
-            episodes = domain.episodes,
-            status = domain.status,
-            synopsis = domain.synopsis,
-            trailerUrl = domain.trailerUrl,
-            genres = domain.genres,
-            isFavorite = domain.isFavorite
-        )
-    }
-    
+
     fun mapDtoToEntity(dto: AnimeItemDto): AnimeEntity {
         return AnimeEntity(
             malId = dto.malId,

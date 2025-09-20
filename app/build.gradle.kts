@@ -75,9 +75,11 @@ dependencies {
     ksp("androidx.room:room-compiler:2.8.0")
 
     // ExoPlayer for Video
-    implementation("androidx.media3:media3-exoplayer:1.8.0")
-    implementation("androidx.media3:media3-ui:1.8.0")
-    implementation("androidx.media3:media3-common:1.8.0")
+    // Media3 ExoPlayer (latest stable versions)
+    implementation("androidx.media3:media3-exoplayer:1.2.1")
+    implementation("androidx.media3:media3-ui:1.2.1")
+    implementation("androidx.media3:media3-common:1.2.1")
+    implementation("androidx.media3:media3-session:1.2.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
@@ -85,5 +87,8 @@ dependencies {
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Youtube video player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
 }

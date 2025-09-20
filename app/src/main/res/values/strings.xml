@@ -1,3 +1,31 @@
 <resources>
-    <string name="app_name">SeekhoAnimeApp</string>
+    <string name="app_name">Seekho Anime</string>
+
+    <!-- Fragment titles -->
+    <string name="top_anime">Top Anime</string>
+    <string name="anime_details">Anime Details</string>
+
+    <!-- Common strings -->
+    <string name="anime_poster">Anime poster</string>
+    <string name="episodes_count">Episodes: %s</string>
+    <string name="rating_score">Rating: %s</string>
+    <string name="genres_list">Genres: %s</string>
+    <string name="status_text">Status: %s</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="toggle_favorite">Toggle favorite</string>
+
+    <!-- Empty states -->
+    <string name="no_anime_available">No anime available</string>
+    <string name="no_synopsis_available">No synopsis available</string>
+    <string name="no_trailer_available">No trailer available</string>
+
+    <!-- ExoPlayer Control Strings -->
+    <string name="exo_controls_play_description">Play</string>
+    <string name="exo_controls_next_description">Next</string>
+    <string name="exo_controls_previous_description">Previous</string>
+    <string name="exo_controls_rewind_description">Rewind</string>
+    <string name="exo_controls_fastforward_description">Fast forward</string>
+    <string name="exo_controls_fullscreen_enter_description">Enter fullscreen</string>
+    <string name="exo_controls_settings_description">Settings</string>
+    <string name="exo_controls_overflow_show_description">Show more controls</string>
 </resources>

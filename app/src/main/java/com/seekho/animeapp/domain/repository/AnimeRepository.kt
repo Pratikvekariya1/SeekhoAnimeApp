@@ -9,6 +9,6 @@ interface AnimeRepository {
     suspend fun refreshAnimeList(): Resource<Unit>
     suspend fun getAnimeDetails(animeId: Int): Resource<Anime>
     suspend fun searchAnime(query: String): Resource<List<Anime>>
-    suspend fun toggleFavorite(animeId: Int): Resource<Unit>
+    suspend fun toggleFavorite(animeId: Int): Resource<Boolean>
     fun getFavoriteAnime(): LiveData<List<Anime>>
 }

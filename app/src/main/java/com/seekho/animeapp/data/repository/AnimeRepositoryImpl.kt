@@ -75,13 +75,14 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun toggleFavorite(animeId: Int): Resource<Unit> {
+    override suspend fun toggleFavorite(animeId: Int): Resource<Boolean> {
         return withContext(Dispatchers.IO) {
             try {
                 val anime = localDataSource.getAnimeById(animeId)
                 if (anime != null) {
+
                     localDataSource.updateFavoriteStatus(animeId, !anime.isFavorite)
-                    Resource.Success(Unit)
+                    Resource.Success(!anime.isFavorite)
                 } else {
                     Resource.Error("Anime not found")
                 }

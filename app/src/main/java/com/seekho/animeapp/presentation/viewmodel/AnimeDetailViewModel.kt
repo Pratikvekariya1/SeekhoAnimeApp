@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.seekho.animeapp.domain.repository.AnimeRepository
 import com.seekho.animeapp.domain.usecase.GetAnimeDetailsUseCase
 import com.seekho.animeapp.presentation.state.AnimeDetailUiState
+import com.seekho.animeapp.presentation.state.AnimeFavoriteUiState
 import com.seekho.animeapp.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +21,12 @@ class AnimeDetailViewModel @Inject constructor(
     
     private val _uiState = MutableLiveData<AnimeDetailUiState>()
     val uiState: LiveData<AnimeDetailUiState> = _uiState
-    
+
+
+    private val _favoriteState = MutableLiveData<AnimeFavoriteUiState>()
+
+    val favoriteState: LiveData<AnimeFavoriteUiState> = _favoriteState
+
     fun loadAnimeDetails(animeId: Int) {
         viewModelScope.launch {
             _uiState.value = AnimeDetailUiState.Loading
@@ -45,7 +51,23 @@ class AnimeDetailViewModel @Inject constructor(
     
     fun toggleFavorite(animeId: Int) {
         viewModelScope.launch {
-            repository.toggleFavorite(animeId)
+            _favoriteState.value = AnimeFavoriteUiState.Loading
+
+            when (val result =  repository.toggleFavorite(animeId)) {
+                is Resource.Success -> {
+                    result.data?.let { anime ->
+                        _favoriteState.value = AnimeFavoriteUiState.Success(anime)
+                    }
+                }
+                is Resource.Error -> {
+                    _favoriteState.value = AnimeFavoriteUiState.Error(
+                        result.message ?: "Unknown error occurred"
+                    )
+                }
+                is Resource.Loading -> {
+                    _favoriteState.value = AnimeFavoriteUiState.Loading
+                }
+            }
         }
     }
 }
