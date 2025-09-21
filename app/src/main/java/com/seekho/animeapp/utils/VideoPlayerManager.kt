@@ -10,8 +10,14 @@ import androidx.media3.ui.PlayerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class VideoPlayerManager(private val context: Context) {
+@Singleton
+class VideoPlayerManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     private var exoPlayer: ExoPlayer? = null
     private var youTubePlayer: YouTubePlayer? = null
@@ -23,9 +29,23 @@ class VideoPlayerManager(private val context: Context) {
         url: String,
         youTubePlayerView: YouTubePlayerView,
         exoPlayerView: PlayerView,
+        networkStateManager: NetworkStateManager,
         onError: (String) -> Unit,
-        onReady: () -> Unit
+        onReady: () -> Unit,
+        onNetworkWarning: () -> Unit = {}
     ) {
+
+        // Check network before attempting to play
+        if (!canPlayVideo(networkStateManager)) {
+            onError("Internet connection required for video playback")
+            return
+        }
+
+        // Show data usage warning for mobile connections
+        if (networkStateManager.isConnectedToMobileData()) {
+            onNetworkWarning()
+        }
+
         when (val urlType = VideoUrlDetector.detectVideoUrlType(url)) {
             is VideoUrlDetector.VideoUrlType.YouTube -> {
                 setupYouTubePlayer(urlType.videoId, youTubePlayerView, exoPlayerView, onError, onReady)
@@ -128,6 +148,19 @@ class VideoPlayerManager(private val context: Context) {
 
         } catch (e: Exception) {
             onError("Failed to setup video player: ${e.message}")
+        }
+    }
+
+    fun canPlayVideo(networkStateManager: NetworkStateManager): Boolean {
+        return when {
+            !networkStateManager.isNetworkAvailable() -> {
+                false // No internet = no video streaming
+            }
+            networkStateManager.isConnectedToMobileData() -> {
+                // Show warning but allow playback
+                true
+            }
+            else -> true
         }
     }
 

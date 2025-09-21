@@ -17,4 +17,9 @@
     <!-- ExoPlayer Colors -->
     <color name="exo_white_opacity_70">#B3FFFFFF</color>
     <color name="exo_white_opacity_30">#4DFFFFFF</color>
+
+    <!-- Network Colors   -->
+    <color name="success_green">#4CAF50</color>
+    <color name="error_red">#F44336</color>
+    <color name="warning_orange">#FF5722</color>
 </resources>

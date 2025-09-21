@@ -14,16 +14,21 @@ import com.seekho.animeapp.presentation.state.AnimeDetailUiState
 import com.seekho.animeapp.presentation.state.AnimeFavoriteUiState
 import com.seekho.animeapp.presentation.ui.fragment.base.BaseFragment
 import com.seekho.animeapp.presentation.viewmodel.AnimeDetailViewModel
+import com.seekho.animeapp.utils.NetworkStateManager
 import com.seekho.animeapp.utils.VideoPlayerManager
-import com.seekho.animeapp.utils.VideoUrlDetector
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AnimeDetailFragment : BaseFragment<FragmentAnimeDetailBinding>() {
 
     private val viewModel: AnimeDetailViewModel by viewModels()
     private val args: AnimeDetailFragmentArgs by navArgs()
-    private lateinit var videoPlayerManager: VideoPlayerManager
+    @Inject
+    lateinit var videoPlayerManager: VideoPlayerManager
+
+    @Inject
+    lateinit var networkStateManager: NetworkStateManager
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -34,9 +39,6 @@ class AnimeDetailFragment : BaseFragment<FragmentAnimeDetailBinding>() {
 
     override fun setupViews() {
         viewModel.loadAnimeDetails(args.animeId)
-
-        // Initialize video player manager
-        videoPlayerManager = VideoPlayerManager(requireContext())
 
         // Add YouTube player to lifecycle
         lifecycle.addObserver(binding.youtubePlayerView)
@@ -125,11 +127,12 @@ class AnimeDetailFragment : BaseFragment<FragmentAnimeDetailBinding>() {
             textNoTrailer.visibility = View.GONE
 
 
-            // Setup the appropriate player
+            // Setup the appropriate player - FIXED CALL
             videoPlayerManager.setupPlayer(
                 url = trailerUrl,
                 youTubePlayerView = youtubePlayerView,
                 exoPlayerView = exoPlayerView,
+                networkStateManager = networkStateManager,  // Add this parameter
                 onError = { errorMessage ->
                     Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
                     showNoTrailerState()
@@ -137,6 +140,13 @@ class AnimeDetailFragment : BaseFragment<FragmentAnimeDetailBinding>() {
                 onReady = {
                     // Video is ready to play
                     progressBarVideo.visibility = View.GONE
+                },
+                onNetworkWarning = {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.mobile_data_warning),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             )
 

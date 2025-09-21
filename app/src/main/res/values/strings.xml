@@ -28,4 +28,10 @@
     <string name="exo_controls_fullscreen_enter_description">Enter fullscreen</string>
     <string name="exo_controls_settings_description">Settings</string>
     <string name="exo_controls_overflow_show_description">Show more controls</string>
+
+    <string name="offline_mode_message">Offline Mode - Some features may be limited</string>
+    <string name="retry">Retry</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="mobile_data_warning">Using mobile data for video streaming</string>
+    <string name="connection_restored">Connection restored</string>
 </resources>
